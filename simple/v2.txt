@@ -1,0 +1,64 @@
+!!! in app.js
+app.use(express.static("public"));
+!!
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A simple app</title>
+    <script>
+      window.onload = async () => {
+        let btn = document.getElementById("del");
+        let name = document.getElementById("name");
+
+        let deleteCar = async (name) => {
+          try {
+            await fetch(`/cars/${name}`, {
+              method: "DELETE",
+            });
+
+            await load();
+          } catch (err) {
+            console.warn("Error deleting car:", err);
+          }
+        };
+
+        btn.onclick = async () => {
+          await deleteCar(name.value);
+        };
+
+        let tbl = document.getElementById("main");
+
+        let load = async () => {
+          try {
+            let response = await fetch("/cars");
+            let data = await response.json();
+            let rows = data.map(
+              (e) => `
+                        <tr>
+                            <td>
+                                ${e.name}
+                            </td>
+                            <td>
+                                ${e.color}
+                            </td>
+                        </tr>
+                    `
+            );
+            tbl.innerHTML = rows.join("");
+          } catch (err) {
+            console.warn("Error loading cars:", err);
+          }
+        };
+
+        await load();
+      };
+    </script>
+  </head>
+  <body>
+    A simple app
+    <input type="text" placeholder="name" id="name" />
+    <table id="main"></table>
+    <button id="del">Delete</button>
+  </body>
+</html>

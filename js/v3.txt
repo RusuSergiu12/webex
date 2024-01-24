@@ -1,0 +1,14 @@
+class Queue {
+  items = new Array();
+
+  insert(element) {
+    if (typeof element !== "string") throw new Error("Invalid Type");
+    this.items.push(element);
+  }
+  extract() {
+    if (this.items.length === 0) throw new Error("Invalid Operation");
+    return this.items.shift();
+  }
+}
+
+module.exports = Queue;

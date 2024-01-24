@@ -1,0 +1,30 @@
+app.get("/homeworks", async (req, res) => {
+  try {
+    let homeworks = await Homework.findAll();
+    if (req.query.pass === "true") {
+      homeworks = homeworks.filter((homework) => homework.grade >= 5);
+    }
+    res.status(200).json(homeworks);
+  } catch (err) {
+    console.warn(err.stack);
+    res.status(500).json({ message: "server error" });
+  }
+});
+
+app.get("/homeworks/:id", async (req, res) => {
+  try {
+    const homework = await Homework.findByPk(req.params.id);
+    if (homework) {
+      if (req.headers.accept === "text/plain") {
+        res.status(200).send(homework.content);
+        return;
+      }
+      res.status(200).json(homework);
+    } else {
+      res.status(404).json({ message: "not found" }).send();
+    }
+  } catch (err) {
+    console.warn(err.stack);
+    res.status(500).json({ message: "server error" });
+  }
+});

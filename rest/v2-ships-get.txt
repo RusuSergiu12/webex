@@ -1,0 +1,25 @@
+app.get("/ships", async (req, res) => {
+  if (!req.query.pageNo && !req.query.pageSize) {
+    const ships = await Ship.findAll();
+    return res.status(200).send(ships);
+  }
+  if (req.query.pageNo && !req.query.pageSize) {
+    const ships = await Ship.findAll({
+      limit: 5,
+      offset: 5 * req.query.pageNo,
+    });
+    return res.status(200).send(ships);
+  }
+  if (req.query.pageSize && req.query.pageNo) {
+    if (isNaN(req.query.pageSize) || isNaN(req.query.pageNo)) {
+      const ships = await Ship.findAll();
+      return res.status(200).send(ships);
+    } else {
+      const ships = await Ship.findAll({
+        limit: req.query.pageSize,
+        offset: req.query.pageSize * req.query.pageNo,
+      });
+      return res.status(200).send(ships);
+    }
+  }
+});

@@ -1,0 +1,41 @@
+import React, { useState } from "react";
+
+const AddDevice = (props) => {
+  const { onAdd } = props;
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [lastAddedDevice, setLastAddedDevice] = useState(null);
+
+  const handleAdd = () => {
+    const newDevice = { name, price };
+    onAdd(newDevice);
+
+    setLastAddedDevice(newDevice);
+
+    setName("");
+    setPrice(0);
+  };
+
+  return (
+    <div>
+      <h1>Add a device</h1>
+      <input
+        type="text"
+        placeholder="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <input
+        type="number"
+        placeholder="price"
+        value={price}
+        onChange={(e) => setPrice(Number(e.target.value))}
+      />
+      <button onClick={handleAdd}>add</button>
+
+      {lastAddedDevice && <p>Added device: {lastAddedDevice.name}</p>}
+    </div>
+  );
+};
+
+export default AddDevice;

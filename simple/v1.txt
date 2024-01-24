@@ -1,0 +1,50 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A simple app</title>
+    <script>
+      window.onload = async () => {
+        let btn = document.getElementById("reload");
+        let filterInput = document.getElementById("filter");
+
+        let tbl = document.getElementById("main");
+
+        const response = await fetch("http://localhost:8080/cars");
+        const data = await response.json();
+
+        let load = async (filter) => {
+          try {
+            let fData = data.filter((e) => e.color.includes(filter));
+
+            let rows = fData.map(
+              (e) => `
+                        <tr>
+                            <td>
+                                ${e.name}
+                            </td>
+                            <td>
+                                ${e.color}
+                            </td>
+                        </tr>
+                    `
+            );
+            tbl.innerHTML = rows.join();
+          } catch (err) {
+            console.warn(err);
+          }
+        };
+        load("");
+        btn.addEventListener("click", () => {
+          load(filterInput.value);
+        });
+      };
+    </script>
+  </head>
+  <body>
+    A simple app
+    <input type="text" placeholder="filter" id="filter" />
+    <table id="main"></table>
+    <button id="reload"></button>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+!!! in app.js app.use(express.static("public"));
+
+!!! IN JSON
+{
+  "name": "influencer",
+  "instagram": 1000000,
+  "youtube": 2000000
+}
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A simple app</title>
+    <script>
+      let load = async () => {
+        try {
+          let response = await fetch(`/profile.json`);
+          let data = await response.json();
+          //   let content = "";
+          //   content += `
+          //     <p id="p1"> ${data.name} </p>
+          //     <p id="p2"> ${data.instagram} </p>
+          //     <p id="p3"> ${data.youtube} </p>
+          //   `;
+          //   document.getElementById("content").innerHTML = content;
+          document.getElementById("p1").innerHTML = data.name;
+          document.getElementById("p2").innerHTML = data.instagram;
+          document.getElementById("p3").innerHTML = data.youtube;
+        } catch (err) {
+          console.warn(err);
+        }
+      };
+
+      let convert = () => {
+        let p2 = document.getElementById("p2").innerHTML;
+        document.getElementById("p2").innerHTML = p2 / 1000000 + "M";
+      };
+      document.addEventListener("DOMContentLoaded", load);
+    </script>
+  </head>
+  <body>
+    <h1>Profil influencer</h1>
+    <div id="content">
+      <p id="p1">name</p>
+      <p id="p2">1000000</p>
+      <p id="p3">yt</p>
+    </div>
+    <input type="button" value="convert" id="convert" onclick="convert()" />
+  </body>
+</html>

@@ -1,0 +1,57 @@
+in COMPANYDETAILS
+const CompanyDetails = (props) => {
+  let { item, onCancel } = props;
+
+  return (
+    <div>
+      <p>Details for {item.name}</p>
+      <p>Employees: {item.employees}</p>
+      <p>Revenue: {item.revenue}</p>
+      <input type="button" value="cancel" onClick={onCancel} />
+    </div>
+  );
+};
+
+export default CompanyDetails;
+!!! IN COMPANY LIST
+import { useState, useEffect } from "react";
+import CompanyStore from "../stores/CompanyStore";
+import Company from "./Company";
+import CompanyDetails from "./CompanyDetails";
+
+const store = new CompanyStore();
+
+const CompanyList = () => {
+  const [companies, setCompanies] = useState([]);
+  const [selected, setSelected] = useState(null);
+
+  const select = (company) => {
+    setSelected(company);
+  };
+
+  const cancel = () => {
+    setSelected(null);
+  };
+
+  useEffect(() => {
+    setCompanies(store.getAll());
+
+    store.emitter.addListener("UPDATE", () => {
+      setCompanies([...store.getAll()]);
+    });
+  }, []);
+
+  if (selected) {
+    return <CompanyDetails item={selected} onCancel={cancel} />; !!!!!!!!!asta am pus
+  } else {
+    return (
+      <div>
+        {companies.map((e, i) => (
+          <Company item={e} key={i} onSelect={select} /> !!!!!!!! si asta, atat
+        ))}
+      </div>
+    );
+  }
+};
+
+export default CompanyList;

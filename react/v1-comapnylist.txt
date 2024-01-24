@@ -1,0 +1,26 @@
+import { useState, useEffect } from "react";
+import CompanyStore from "../stores/CompanyStore";
+import Company from "./Company";
+
+const store = new CompanyStore();
+
+const CompanyList = () => {
+  const [companies, setCompanies] = useState([]);
+  useEffect(() => {
+    setCompanies(store.getAll());
+  }, []);
+  const saveCompany = (id, company) => {
+    store.saveOne(id, company);
+    setCompanies(store.getAll());
+  };
+
+  return (
+    <div>
+      {companies.map((item) => (
+        <Company key={item.id} item={item} onSave={saveCompany} />
+      ))}
+    </div>
+  );
+};
+
+export default CompanyList;

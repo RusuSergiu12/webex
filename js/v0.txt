@@ -1,0 +1,32 @@
+function bowdlerize(input, dictionary) {
+  if (typeof input !== "string") {
+    throw new Error("Input should be a string");
+  }
+  for (let i = 0; i < dictionary.length; i++) {
+    if (typeof dictionary[i] !== "string") {
+      throw new Error("Invalid dictionary format");
+    }
+  }
+
+  let sentence = input.split(" ");
+  let censored = input;
+
+  dictionary.forEach((wordDict) => {
+    sentence.forEach((wordSentence) => {
+      if (wordDict.toLowerCase() === wordSentence.toLowerCase()) {
+        let newWord =
+          wordSentence[0] +
+          "*".repeat(wordSentence.length - 2) +
+          wordSentence[wordSentence.length - 1];
+        censored = censored.replace(wordSentence, newWord);
+      }
+    });
+  });
+  return censored;
+}
+
+const app = {
+  bowdlerize,
+};
+
+module.exports = app;

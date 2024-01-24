@@ -1,0 +1,24 @@
+function processString(input) {
+  if (input.length === 0) {
+    return 100;
+  } else {
+    tokens = input.split(" ");
+    let sum = 0;
+    for (let i = 0; i < tokens.length; i++) {
+      if (isNaN(tokens[i])) {
+        throw new Error("Item is not a number");
+      }
+
+      if (tokens[i] % 2 === 0) {
+        sum += parseInt(tokens[i]);
+      }
+    }
+    return 100 - sum;
+  }
+}
+
+const app = {
+  processString: processString,
+};
+
+module.exports = app;
