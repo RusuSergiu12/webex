@@ -1,0 +1,69 @@
+import React, { useState } from "react";
+
+const RobotForm = ({ onAdd }) => {
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [mass, setMass] = useState("");
+
+  const handleAddClick = () => {
+    const parsedMass = parseFloat(mass);
+    let newMass = "";
+
+    if (!isNaN(parsedMass) && parsedMass >= 500) {
+      newMass = parsedMass.toString();
+    }
+
+    const newRobot = {
+      name,
+      type,
+      mass: newMass,
+    };
+
+    onAdd(newRobot);
+
+    setName("");
+    setType("");
+    setMass("");
+  };
+
+  return (
+    <div>
+      <h2>Add Robot</h2>
+      <div>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          value={name}
+          placeholder="name"
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <div>
+        <input
+          id="type"
+          name="type"
+          type="text"
+          value={type}
+          placeholder="type"
+          onChange={(e) => setType(e.target.value)}
+        />
+      </div>
+      <div>
+        <input
+          id="mass"
+          name="mass"
+          type="number"
+          value={mass}
+          placeholder="mass"
+          onChange={(e) => setMass(e.target.value)}
+        />
+      </div>
+      <div>
+        <button onClick={handleAddClick}>add</button>
+      </div>
+    </div>
+  );
+};
+
+export default RobotForm;
