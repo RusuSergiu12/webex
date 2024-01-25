@@ -46,27 +46,27 @@ app.get("/students", async (req, res) => {
   }
 });
 
-app.put("/students/:id", async (req, res) => {
-  try {
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({ message: "body is missing" });
+app.put('/students/:id', async (req, res) => {
+    try{
+        if(!req.body||Object.keys(req.body).length===0){
+           return res.status(400).json({message:"body is missing"});
+        }
+        if(!req.body.name||!req.body.address||!req.body.age){
+           return res.status(400).json({message:"malformed request"});
+        }
+        let student= await Student.findByPk(req.params.id);
+        if(!student){
+            return res.status(404).json({message:"not found"});
+        }
+        if(student&&req.body){
+            await student.update(req.body);
+            return res.status(202).json({message:"accepted"});
+        }
     }
-    if (!req.body.name || !req.body.address || !req.body.age) {
-      return res.status(400).json({ message: "malformed request" });
+    catch(err){
+        console.warn(err.stack)
+        res.status(500).json({message : 'server error'})        
     }
-    let student = await Student.findByPk(req.params.id);
-    if (!student) {
-      return res.status(404).json({ message: "not found" });
-    }
-    student.name = req.body.name;
-    student.address = req.body.address;
-    student.age = req.body.age;
-    res.status(202).json({ message: "accepted" });
-    return student.save();
-  } catch (err) {
-    console.warn(err.stack);
-    res.status(500).json({ message: "server error" });
-  }
-});
+})
 
 module.exports = app;
