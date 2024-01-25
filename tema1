@@ -1,0 +1,33 @@
+const compress = (a, b = true) => {
+	if(typeof a !=="string"||!a instanceof String){
+		throw new Error("InvalidType");
+	}
+	if(a.length===0){
+		return '';
+	}
+	if(b===true){
+		let compressedString = '';
+    	let count = 1;
+
+    	for (let i = 0; i < a.length; i++) {
+        	if (a[i] === a[i + 1]) {
+           		count++;
+        	} else {
+            	compressedString += a[i] + count;
+            	count = 1; 
+        	}
+    	}
+		return compressedString;
+	}
+	else{
+		let decompressedString="";
+		for(let i=0; i<a.length; i++){
+			if(typeof a[i]==="string"||a[i] instanceof String){
+				decompressedString+=a[i].repeat(a[i+1]);
+			}
+		}
+		return decompressedString;
+	}
+}
+
+module.exports = compress
