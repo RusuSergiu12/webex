@@ -1,0 +1,30 @@
+function render(input, values) {
+  if (typeof input !== "object") {
+    throw new Error("InvalidType");
+  }
+  if (Object.keys(input).length === 0) {
+    return "";
+  }
+
+  function substituteTokens(str) {
+    return str.replace(/\$\{(\w+)\}/g, (match, key) => {
+      return values.hasOwnProperty(key) ? values[key] : match;
+    });
+  }
+
+  function buildString(obj) {
+    return Object.entries(obj).reduce((acc, [key, value]) => {
+      if (typeof value === "object" && value !== null) {
+        return `${acc}<${key}>${buildString(value)}</${key}>`;
+      } else {
+        return `${acc}<${key}>${substituteTokens(value)}</${key}>`;
+      }
+    }, "");
+  }
+
+  return buildString(input);
+}
+
+module.exports = {
+  render,
+};
